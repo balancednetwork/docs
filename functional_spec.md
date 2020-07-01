@@ -36,10 +36,12 @@ Pegged assets are guaranteed their value in ICX by the Balanced DAO. If, at any 
 
 ## Table of Contents
 
-[TOC]
-
-
-
+* [Balanced Terminology](/functional_spec.md#Balanced-Terminology)
+* [Front End Module](/functional_spec.md#Front-End-Module)
+* [Backend Module](/functional_spec.md#Backend-Module)
+* [Smart Contracts](/functional_spec.md#Smart-Contracts)
+* [Equations and Algorithms](/functional_spec.md#Equations-and-Algorithms)
+* [Flow of a Position](/functional_spec.md#Flow-of-a-Position)
 
 
 ## Balanced Terminology
