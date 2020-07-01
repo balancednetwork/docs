@@ -125,7 +125,7 @@ Balanced users can sign in using the ICONex extension in their browser, or throu
 
 ### Home
 
-The Home page consists of 6 sections: 
+The Home page consists of 6 sections:
 
 *   Collateral and Loan (together referred to as the Position Manager)
 *   Position Details
@@ -133,7 +133,7 @@ The Home page consists of 6 sections:
 *   Rewards
 *   Activity
 
-With them, a user can: 
+With them, a user can:
 
 *   Open a position
 *   View and manage a position
@@ -185,7 +185,7 @@ The user can then monitor their position from the Position Details section, whic
 *   Collateral amount
 *   Loan amount
 *   Loan limit
-*   Their network debt 
+*   Their network debt
 *   ICX price when all collateral is locked
 *   ICX price when all collateral is liquidated
 
@@ -236,7 +236,7 @@ The user clicks “Claim rewards”, and sees a prompt to confirm and stake thei
 
 The user adjusts the staked amount with the slider, then clicks Stake and signs a transaction.
 
-The first time a user stakes Balance Tokens, they'll be prompted to visit the Vote page to choose P-Reps to vote for. 
+The first time a user stakes Balance Tokens, they'll be prompted to visit the Vote page to choose P-Reps to vote for.
 
 
 #### View activity
@@ -303,7 +303,7 @@ The Vote page consists of 3 sections:
 *   P-Rep Updates
 *   P-Reps
 
-With them, a user can: 
+With them, a user can:
 
 
 
@@ -467,11 +467,11 @@ The service is broken into multiple components:
 
 #### Architecture
 
-Each of the services in Balanced will be implemented as standalone microservices inside of containers. This allows for the simplest community deployment of the product, with a single container orchestration file needed to download the entire stack and run locally. In production, these services will be spread across multiple instances. 
+Each of the services in Balanced will be implemented as standalone microservices inside of containers. This allows for the simplest community deployment of the product, with a single container orchestration file needed to download the entire stack and run locally. In production, these services will be spread across multiple instances.
 
 **Backend:** Nodejs microservices - A collection of services will parse data from the blockchain and inform end users
 
-**Message Queue:** Kafka - Messages will be passed between services through kafka topics 
+**Message Queue:** Kafka - Messages will be passed between services through kafka topics
 
 **Datastore:** Redis - Rapidly accessed and changing data will be held in redis
 
@@ -520,9 +520,9 @@ If the transaction has failed, the Transaction Parser will update the transactio
 
 The Transaction Parser is also responsible for handling token transfers. It updates the address’s balance with the new amount and sends a message to the balance.update topic to inform the user of the token transfer.
 
-The Transaction Parser interacts with the Loans Contract when users add collateral, when transactions must be replayed, when users repay their debt, and when users are liquidated. 
+The Transaction Parser interacts with the Loans Contract when users add collateral, when transactions must be replayed, when users repay their debt, and when users are liquidated.
 
-When adding collateral, the Transaction Parser will send a message to balance.update to inform users of their new balance. When a user has transactions that must be replayed, the Transaction Parser will replay transactions, note the user’s current spot in the operation log, send a positions.update, and send a balance.update message. 
+When adding collateral, the Transaction Parser will send a message to balance.update to inform users of their new balance. When a user has transactions that must be replayed, the Transaction Parser will replay transactions, note the user’s current spot in the operation log, send a positions.update, and send a balance.update message.
 
 When a user repays their debt, the Transaction Parser will replay transactions to get the user up to date in the operation log, replay any activity on the Loans contract and send the remaining balance to the user. Finally, in the case of a liquidation, the Transaction Parser will update the balance of the user and update their position in the Loans smart contract.
 
@@ -531,7 +531,7 @@ When a user repays their debt, the Transaction Parser will replay transactions t
 
 The Balanced API will be primarily websocket driven, with some RESTful API endpoints for submitting transactions. Users can subscribe to topics at the level of a particular address to get informed of balance updates or others. All APIs will be public, therefore a user could subscribe to another address if they so choose. API endpoints and their responses are outlined below.
 
-**Asset Subscription** 
+**Asset Subscription**
 
 Endpoint: assets.subscribe, params [“hx…3”]
 
@@ -637,7 +637,7 @@ The arbitration bot will hedge the tokens on the Balanced DEX against a centrali
 
 
 
-1. Terminate against centralized exchanges 
+1. Terminate against centralized exchanges
 2. Keep within a tolerable range to unstake ICX (sicx pairs)
 3. Retire on the loans contract (pegged asset pairs)
 
@@ -685,7 +685,7 @@ As other pegged assets are added to Balanced, they will have the same specificat
 
 #### sICX Staking Management
 
-This contract will hold all ICX on deposit with Balanced. It will maintain an exchange rate between ICX and sICX, which is strictly determined by the ratio between ICX held on the contract and sICX total supply. 
+This contract will hold all ICX on deposit with Balanced. It will maintain an exchange rate between ICX and sICX, which is strictly determined by the ratio between ICX held on the contract and sICX total supply.
 
 When ICX is received, the contract will call for sICX to be minted and returned in an amount determined by going exchange rate. Any holder of sICX will be able to return it to this contract in exchange for ICX at the going exchange rate. A return will burn the sICX and start an unstaking process on the amount of ICX due.
 
@@ -696,9 +696,9 @@ A vote method, which will only be callable by the Governance contract, will spec
 
 #### Rewards
 
-The Rewards contract sends out daily mining rewards of Balance Tokens as an incentive for certain behavior, including holding debt positions and providing DEX liquidity. The daily allocation of Balance Tokens will be distributed according to configurable parameters, currently {“debt_position”: 55, “DEX_liquidity”: 10, “continued_operations”: 30, “emergency_fund”: 5}, and controlled by the governance contract. 
+The Rewards contract sends out daily mining rewards of Balance Tokens as an incentive for certain behavior, including holding debt positions and providing DEX liquidity. The daily allocation of Balance Tokens will be distributed according to configurable parameters, currently {“debt_position”: 55, “DEX_liquidity”: 10, “continued_operations”: 30, “emergency_fund”: 5}, and controlled by the governance contract.
 
-The Rewards contract will also be responsible for governing the number of Balance Tokens mined per day. At the beginning of each new day, the Rewards contract sends a request to the Balance Token contract to mint the current day’s allocation of tokens, sends the tokens to the DEX (all miners will claim their BAL from the DEX), then begins reading batches of data from the Loans contract and the DEX on subsequent transactions. 
+The Rewards contract will also be responsible for governing the number of Balance Tokens mined per day. At the beginning of each new day, the Rewards contract sends a request to the Balance Token contract to mint the current day’s allocation of tokens, sends the tokens to the DEX (all miners will claim their BAL from the DEX), then begins reading batches of data from the Loans contract and the DEX on subsequent transactions.
 
 There are two ways to mine BAL, debt mining and DEX mining, and the Rewards contract is responsible for tracking both. As the Rewards contract reads batches of debt position data from the Loans contract and liquidity provider transaction data from the DEX contract, it adds entries of debt position mining power and DEX liquidity mining power for each address and sums up the total system mining power for each type of mining.
 
@@ -719,7 +719,7 @@ Balanced distributes fees to token holders on a weekly basis. At the end of each
 
 The Dividends contract receives fees and allocates fees to staked BAL on a weekly basis. All dividends will be held on the Dividends contract until they are claimed. Each individual participant must claim their dividends. Fees will be sent to the Dividends contract as they are incurred by transactions on the Loans, DEX, ICD, and other pegged asset contracts.
 
-This contract will calculate and assign all dividend allocations at the end of each week. As with the Rewards contract, a snapshot of the database of staked BAL holders will be taken at the end of the week and will be used to allocate dividends. 
+This contract will calculate and assign all dividend allocations at the end of each week. As with the Rewards contract, a snapshot of the database of staked BAL holders will be taken at the end of the week and will be used to allocate dividends.
 
 The snapshot will occur prior to the distribution of newly mined BAL and will be stored on the BAL token contract. When a transaction triggers distributions, a batch of staked token balances will be read from the BAL token contract, then the allocation of dividends will be calculated and sent for each of those addresses. This will repeat with successive transactions until the distributions are complete.
 
@@ -821,7 +821,7 @@ _retire_asset()_: When a trader sends a transaction to retire an asset it will c
 
 Balanced offers an incentive for anyone who triggers a forced liquidation. An oracle price must have been obtained within a limited time window (e.g. 10 minutes) of the liquidation request for the collateralization ratio calculation to be considered accurate and the liquidation to be executed. Transactions on any of these methods will be used to carry out Balanced operational processing as needed in addition to the activity the method is called to perform.
 
-_threshold_check()_: Updates batches of accounts, checking for any that are below the liquidation threshold. This will call the _event_replay()_ method on batches of addresses. The _event_replay()_ method will issue a ThresholdReached event in case of an account dropping below a threshold. 
+_threshold_check()_: Updates batches of accounts, checking for any that are below the liquidation threshold. This will call the _event_replay()_ method on batches of addresses. The _event_replay()_ method will issue a ThresholdReached event in case of an account dropping below a threshold.
 
 _liquidate()_: This method will execute the following steps:
 
@@ -842,7 +842,7 @@ These methods will be called to set up, configure, and extend Balanced. In the i
 
 _add_asset(_token_address)_: When a new asset is added an entry will be created in the Asset Dictionary.
 
-_read_position_data_batch()_: Provided for the Rewards contract to access the position data. When this method is called and the position DictDB is in the operating state, this call will transition it into the frozen state. In the frozen state only one of the two db copies is operational, while the second is used for transferring batches to the Rewards contract. Successive calls will return successive batches from the positions DictDB. A final call that returns an empty batch will also transition the positions DictDB back to the operating state. 
+_read_position_data_batch()_: Provided for the Rewards contract to access the position data. When this method is called and the position DictDB is in the operating state, this call will transition it into the frozen state. In the frozen state only one of the two db copies is operational, while the second is used for transferring batches to the Rewards contract. Successive calls will return successive batches from the positions DictDB. A final call that returns an empty batch will also transition the positions DictDB back to the operating state.
 
 **Read-only External Methods**
 
@@ -904,7 +904,7 @@ Each DEX user will be tracked by their address. For each user address there will
 
 **Provision for transferring liquidity mining data to the Rewards contract**
 
-Anyone completing limit orders for sICXICX on the DEX within 3% of the true value of sICX will earn Balance Tokens. Trading of pegged assets may also be incentivized with mining rewards. Each address completing orders will accumulate calculated mining power throughout the day with each additional trade. Each day will accumulate mining power into a new dictionary so the dictionary for the previous day may be used by the Rewards contract to calculate Balance Token earnings.
+Anyone buying sICX on the DEX within 3% of its true value will earn Balance Tokens. Trading of pegged assets may also be incentivized with mining rewards. Each address completing orders will accumulate calculated mining power throughout the day with each additional trade. Each day will accumulate mining power into a new dictionary so the dictionary for the previous day may be used by the Rewards contract to calculate Balance Token earnings.
 
 
 ![alt_text](/assets/sequence_diagram.png "Core Functional Sequence Diagrams")
@@ -977,7 +977,7 @@ In order to open a position, a user must first convert their ICX into sICX. This
 
 After the user has deposited ICX into the Balanced Staking Pool, their sICX will be sent to the loan contract. With sICX in the loan contract, the oracle solution leveraged by Balanced will provide the user with the value of their collateral.
 
-A user is now able to mint pegged assets based on the value of their collateral. Users pay a 25 basis point origination fee to borrow pegged assets from Balanced. 
+A user is now able to mint pegged assets based on the value of their collateral. Users pay a 25 basis point origination fee to borrow pegged assets from Balanced.
 
 For this walkthrough, let’s assume that Bob deposits $500 worth of sICX. With a deposit of $500 worth of collateral, Bob is now able to borrow up to $125 worth of ICON Dollars (ICD). Bob decides to borrow 125 ICD, and his open position will therefore be 125 ICD. Bob will only receive 124.6875 ICD because of the origination fee.
 
@@ -1001,9 +1001,9 @@ Let’s now assume the value of Bob’s collateral has gone down to $300 and he 
 
 #### Liquidations
 
-Let’s now assume the value of Bob’s collateral has gone down to $125 and he still has 100 ICD of debt. Bob’s collateral ratio is now 125%, which is below the liquidation ratio. Bob is now eligible to be liquidated by other users. Other users are incentivized to liquidate Bob because they will receive 5% of the value of Bob’s bad debt. 
+Let’s now assume the value of Bob’s collateral has gone down to $125 and he still has 100 ICD of debt. Bob’s collateral ratio is now 125%, which is below the liquidation ratio. Bob is now eligible to be liquidated by other users. Other users are incentivized to liquidate Bob because they will receive 5% of the value of Bob’s bad debt.
 
-In this scenario, Alice triggers Bob’s liquidation and will receive 5 ICD worth of Bob’s collateral. Bob’s position will be closed, all of Bob’s collateral will be sent to the Forced Liquidation Pool, and the 100 ICD of outstanding debt will be converted to bad debt. 
+In this scenario, Alice triggers Bob’s liquidation and will receive 5 ICD worth of Bob’s collateral. Bob’s position will be closed, all of Bob’s collateral will be sent to the Forced Liquidation Pool, and the 100 ICD of outstanding debt will be converted to bad debt.
 
 Any user (including Bob) will now have the opportunity to pay off the 100 ICD of bad debt in exchange for up to a 10% bonus on the repayment depending on the value of the collateral held in the Forced Liquidation Pool. Any leftover collateral upon paying off all bad debt will be sent to the Emergency Reserve Fund.
 
@@ -1016,16 +1016,16 @@ To summarize, 5 ICD worth of Bob’s collateral is given to Alice for triggering
 
 When a Trader retires pegged assets, all current borrowers are automatically deleveraged based on their percentage of debt relative to the value of all debt on Balanced. Let’s assume that Bob has $500 worth of collateral and makes up 1% of the total debt on Balanced.
 
-Alice has managed to purchase 100 ICD for only $80 and would like to take advantage of the arbitrage opportunity offered by Balanced. When Alice retires 100 ICD she will receive $99 worth of collateral because of the 1% arbitrage fee. 1 ICD will be sent to the Balanced Rewards Pool and 99 ICD will be retired. 
+Alice has managed to purchase 100 ICD for only $80 and would like to take advantage of the arbitrage opportunity offered by Balanced. When Alice retires 100 ICD she will receive $99 worth of collateral because of the 1% arbitrage fee. 1 ICD will be sent to the Balanced Rewards Pool and 99 ICD will be retired.
 
-Since Bob makes up 1% of the total debt on Balanced, Bob will lose $0.99 worth of collateral and 0.99 ICD worth of his debt will be automatically paid off. 
+Since Bob makes up 1% of the total debt on Balanced, Bob will lose $0.99 worth of collateral and 0.99 ICD worth of his debt will be automatically paid off.
 
 
 ### Closing a position
 
 A position can be closed three ways: retirements, repayments, and liquidations.
 
-Let’s assume Bob has 100 ICD of debt and $500 of collateral. 
+Let’s assume Bob has 100 ICD of debt and $500 of collateral.
 
 Bob’s position can be closed with retirements if 100% of circulating ICD supply is retired. Balanced would sell $100 worth of collateral, Bob’s debt would be 0 ICD, and his position would be closed.
 
