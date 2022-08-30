@@ -1,19 +1,20 @@
 # Table of Contents
 
-* [External Methods](#External-Methods)
-* [Readonly Methods](#Readonly-Methods)
+* [External Methods](#external-methods)
+* [Readonly Methods](#readonly-methods)
 
 # External Methods
 
-* [tokenFallback](##tokenFallback)
-* [borrow](##borrow)
-* [depositAndBorrow](##depositAndBorrow)
-* [returnAsset](##returnAsset)
-* [withdrawCollateral](##withdrawCollateral)
-* [withdrawAndUnstake](##withdrawAndUnstake)
-* [liquidate](##liquidate)
-* [retireBadDebt](##retireBadDebt)
-* [retireBadDebtForCollateral](##retireBadDebtForCollateral)
+* [tokenFallback](#tokenfallback)
+* [borrow](#borrow)
+* [depositAndBorrow](#depositandborrow)
+* [returnAsset](#returnasset)
+* [withdrawCollateral](#withdrawcollateral)
+* [withdrawAndUnstake](#withdrawandunstake)
+* [liquidate](#liquidate)
+* [retireBadDebt](#retirebaddebt)
+* [retireBadDebtForCollateral](#retirebaddebtforcollateral)
+* [Setters](#setters)
 
 <br>
 
@@ -46,12 +47,12 @@ Handles collateral deposits of IRC2 tokens, with possibility to take loan in sam
 ### **External calls:**
 * **Collateral contract**: symbol()
 * if _asset and _amount is specified
-  * [borrow](##borrow) is applied
+  * [borrow](#borrow) is applied
 
 ### **Result:**
 * user collateral for _from is increased by value
 * if _asset and _amount is specified
-  * results is the result of calling [borrow](##borrow) for _from
+  * results is the result of calling [borrow](#borrow) for _from
 
 <br>
 
@@ -82,8 +83,8 @@ Issues a loan for caller against the specified collateral, resulting in a debt o
 * _amountToBorrow + fee does not bring total debt + bad debt for specified collateral above debt ceiling.
 
 ### **External calls:**
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_assetToBorrow)
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_collateralToBorrowAgainst)
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_assetToBorrow)
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_collateralToBorrowAgainst)
 * **Rewards** : updateRewardsData("Loans", previousAssetTotalDebt, caller, previousUserDebt)
 * **_assetToBorrow contract**: mintTo(caller, _amountToBorrow)
 * **_assetToBorrow contract**: mintTo(*feehandler*, fee)
@@ -120,18 +121,18 @@ If _asset and _amount is specified issues a loan on sICX
 
 ### **Restrictions:**
 * If _asset and _amount is specified
-  * [borrow](##borrow) restrictions is applied
+  * [borrow](#borrow) restrictions is applied
 ### **External calls:**
 * If ICX was deposited
   * **Staking** : stakeICX(LoansAddress)
 * If _asset and _amount is specified
-  * [borrow](##borrow) is applied
+  * [borrow](#borrow) is applied
 
 ### **Result:**
 * If ICX was deposited
   * User sICX collateral is increased by sICX amount given by staking deposited ICX
 * if _asset and _amount is specified
-  * results is the result of calling [borrow](##borrow) for _from
+  * results is the result of calling [borrow](#borrow) for _from
 
 <br>
 
@@ -184,7 +185,7 @@ void withdrawCollateral(BigInteger _value, @Optional String _collateralSymbol);
 | Name | Type | Description |
 |----------|-------------|------|
 | _value | Number | The amount to withdraw |
-| _collateralSymbol | String | The collateral to withdraw, default "sICX |
+| _collateralSymbol | String | The collateral to withdraw, default "sICX" |
 
 ### **Description:**
 Withdraws collateral from callers position
@@ -200,8 +201,8 @@ Withdraws collateral from callers position
 * Must be a supported collateral type
 
 ### **External calls:**
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)("bnUSD")
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_collateralSymbol)
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)("bnUSD")
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_collateralSymbol)
 * **CollateralContract** : decimals()
 * **CollateralContract** : transfer(caller, _value)
 
@@ -225,11 +226,11 @@ void withdrawAndUnstake(BigInteger _value);
 Withdraws sICX collateral and unstakes it for user
 
 ### **Restrictions:**
-Restrictions are the same as [withdrawCollateral](##withdrawCollateral)(_value, "sICX")
+Restrictions are the same as [withdrawCollateral](#withdrawcollateral)(_value, "sICX")
 
 ### **External calls:**
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)("bnUSD")
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)("sICX")
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)("bnUSD")
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)("sICX")
 * **sICX** : decimals()
 * **sICX** : transfer(stakingContract, _value, {"method": "unstake", "user": caller})
 
@@ -261,8 +262,8 @@ Liquidates a user for _collateralSymbol if collateral/debt ratio is below liquid
 * Must be a supported collateral type
 
 ### **External calls:**
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)("bnUSD")
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_collateralSymbol)
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)("bnUSD")
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_collateralSymbol)
 * **CollateralContract** : decimals()
 * If a users collateral/debt ratio is below liquidation ratio
   * **CollateralContract** : transfer(caller, liquidationReward)
@@ -307,15 +308,15 @@ Caller receives the different collaterals to compensate, ff needed reserve will 
 
 ### **External calls:**
 * for each collateral with bad debt of _symbol, until _value is spent
-  * **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_symbol)
-  * **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(collateralSymbol)
+  * **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_symbol)
+  * **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(collateralSymbol)
   * **CollateralContracts**: decimals()'
   * **AssetContract**: burnFrom(caller, amountRedeemed)
   * **CollateralContract**: transfer(caller, amount needed to compensate or whats left in liquidation pool)
   * If remaining bad debt is 0
     * **CollateralContract** : transfer(caller, rest of Liquidation pool)
   * If collateral in liquidationPool is not enough to cover badDebt or remaining value
-    * **Reserve**: redeem(caller, remainingValue - liquidationPoolValue, collateralSymbol);
+    * **Reserve**: [redeem](/smart-contracts/ReserveFund.md#redeem)(caller, remainingValue - liquidationPoolValue, collateralSymbol);
 
 ### **Result:**
 * for each collateral with bad debt of _symbol, until _value is spent
@@ -357,15 +358,15 @@ Caller receives different the specified collateral from liquidation pool. If nee
 * _collateralSymbol is a supported collateral.
 * _collateralSymbol has bad debt.
 ### **External calls:**
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_symbol)
-* **BalancedOracle**: [getPriceInLoop](/smart-contracts/balancedOracle.md##getPriceInLoop)(_collateralSymbol)
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_symbol)
+* **BalancedOracle**: [getPriceInLoop](/smart-contracts/BalancedOracle.md#getpriceinloop)(_collateralSymbol)
 * **CollateralContracts**: decimals()'
 * **AssetContract**: burnFrom(caller, amountRedeemed)
 * **CollateralContract**: transfer(caller, amount needed to compensate or whats left in liquidation pool)
 * If remaining bad debt is 0
   * **CollateralContract** : transfer(caller, rest of Liquidation pool)
 * If collateral in liquidationPool is not enough to cover badDebt or remaining value
-  * **Reserve**: redeem(caller, value or bad debt - liquidationPoolValue, _collateralSymbol);
+  * **Reserve**: [redeem](/smart-contracts/ReserveFund.md#redeem)(caller, value or bad debt - liquidationPoolValue, _collateralSymbol);
 
 ### **Result:**
 * If value is more than bad debt for collateral
@@ -375,26 +376,120 @@ Caller receives different the specified collateral from liquidation pool. If nee
   * collateral bad debt is decreased by _value
   * collateral liquidation pool is decreased by amount needed to compensate remaining value
 
+
+## **Setters**
+---
+
+All setters should only be available to be called from the governance contract
+### **delegate**
+
+```
+void delegate(PrepDelegations[] prepDelegations)
+```
+
+#### **Description:**
+Delegates loans sICX holding to specified p-reps
+
+<br>
+
+### **addAsset**
+
+```
+void addAsset(Address _token_address, boolean _active, boolean _collateral)
+```
+
+#### **Description:**
+Adds a asset to Loans, uses symbol method of _token_address to save address.
+_collateral specifies if the assets is a collateral or not.
+
+<br>
+
+### **setLockingRatio**
+
+```
+void setLockingRatio(String _symbol, BigInteger _ratio)
+```
+
+<br>
+
+### **setLiquidationRatio**
+
+```
+void setLiquidationRatio(String _symbol, BigInteger _ratio)
+```
+
+<br>
+
+### **setOriginationFee**
+
+```
+void setOriginationFee(BigInteger _fee)
+```
+
+<br>
+
+### **setRedemptionFee**
+
+```
+void setRedemptionFee(BigInteger _fee)
+```
+
+<br>
+
+### **setRetirementBonus**
+
+```
+void setRetirementBonus(BigInteger _points)
+```
+
+<br>
+
+### **setLiquidationReward**
+
+```
+void setLiquidationReward(BigInteger _points)
+```
+
+<br>
+
+### **setNewLoanMinimum**
+
+```
+void setNewLoanMinimum(BigInteger _minimum)
+```
+
+<br>
+
+### **setDebtCeiling**
+
+```
+void setDebtCeiling(String symbol, BigInteger limit)
+```
+
+<br>
+
+
+
 <br>
 
 # Readonly Methods
-* [getPositionAddress](##getPositionAddress)
-* [getAssetTokens](##getAssetTokens)
-* [getCollateralTokens](##getCollateralTokens)
-* [getTotalCollateral](##getTotalCollateral)
-* [getAccountPositions](##getAccountPositions)
-* [getAvailableAssets](##getAvailableAssets)
-* [assetCount](##assetCount)
-* [borrowerCount](##borrowerCount)
-* [hasDebt](##hasDebt)
-* [getBalanceAndSupply](##getBalanceAndSupply)
-* [getBnusdValue](##getBnusdValue)
-* [getLockingRatio](##getLockingRatio)
-* [getLiquidationRatio](##getLiquidationRatio)
-* [getDebtCeiling](##getDebtCeiling)
-* [getTotalDebt](##getTotalDebt)
-* [getTotalCollateralDebt](##getTotalCollateralDebt)
-* [getParameters](##getParameters)
+* [getPositionAddress](#getpositionaddress)
+* [getAssetTokens](#getassettokens)
+* [getCollateralTokens](#getcollateraltokens)
+* [getTotalCollateral](#gettotalcollateral)
+* [getAccountPositions](#getaccountpositions)
+* [getAvailableAssets](#getavailableassets)
+* [assetCount](#assetcount)
+* [borrowerCount](#borrowercount)
+* [hasDebt](#hasdebt)
+* [getBalanceAndSupply](#getbalanceandsupply)
+* [getBnusdValue](#getbnusdvalue)
+* [getLockingRatio](#getlockingratio)
+* [getLiquidationRatio](#getliquidationratio)
+* [getDebtCeiling](#getdebtceiling)
+* [getTotalDebt](#gettotaldebt)
+* [getTotalCollateralDebt](#gettotalcollateraldebt)
+* [getParameters](#getparameters)
 
 ## **getPositionAddress**
 ---
