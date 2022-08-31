@@ -497,10 +497,6 @@ void setDebtCeiling(String symbol, BigInteger limit)
 ```
 Address getPositionAddress(int _index)
 ```
-### **Parameters**:
-| Name | Type | Description |
-|----------|-------------|------|
-| _index | Number | The unique index of a position |
 
 ### **Description:**
 Returns the address for the position with _index. Used to iterate through all users of loans.
@@ -533,6 +529,9 @@ Map<String, String> getCollateralTokens()
 BigInteger getTotalCollateral()
 ```
 
+### **Description:**
+Returns Total collateral in Loop
+
 <br>
 
 ## **getAccountPositions**
@@ -541,6 +540,9 @@ BigInteger getTotalCollateral()
 ```
 Map<String, Object> getAccountPositions(Address _owner)
 ```
+
+### **Description:**
+Returns position data for a address
 
 <br>
 
@@ -569,6 +571,9 @@ int assetCount()
 int borrowerCount()
 ```
 
+### **Description:**
+Returns total amount of position with debt
+
 <br>
 
 ## **hasDebt**
@@ -587,6 +592,11 @@ boolean hasDebt(Address _owner)
 Map<String, BigInteger> getBalanceAndSupply(String _name, Address _owner)
 ```
 
+### **Description:**
+Used by rewards, required for a dataSource.
+
+Returns total bnUSD debt and users total bnUSD debt
+
 <br>
 
 ## **getBnusdValue**
@@ -596,6 +606,11 @@ Map<String, BigInteger> getBalanceAndSupply(String _name, Address _owner)
 BigInteger getBnusdValue(String _name)
 ```
 
+
+### **Description:**
+Used by rewards to calculate APY
+
+Returns total debt
 <br>
 
 ## **getLockingRatio**
