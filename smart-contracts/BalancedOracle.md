@@ -36,6 +36,9 @@ Other symbols: try to fetch rate directly from BandOracle
 ### **Restrictions:**
 #### symbol:
 * Must be a symbol supported by that has either a peg, is dexPriced, is sICX, or natively supported by the band oracle.
+* If Price data is fetched from oracle.
+  * Update of both quote and base need to be within threshold
+
 
 ### **External calls:**
 * if symbol is "sICX"
@@ -74,6 +77,15 @@ void addDexPricedAsset(String symbol, BigInteger dexBnusdPoolId);
 
 ```
 void setPeg(String symbol, String peg);
+
+```
+
+<br>
+
+### **setLastUpdateThreshold**
+
+```
+void setLastUpdateThreshold(BigInteger threshold);
 
 ```
 
@@ -152,6 +164,14 @@ void getPeg(String symbol)
 #### **Description:**
 If symbol is oracle priced this will return what symbol it uses to fetch the price from band. example bnUSD->USD
 
+<br>
+
+### **getLastUpdateThreshold**
+
+```
+BigInteger getLastUpdateThreshold()
+
+```
 
 <br>
 

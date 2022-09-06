@@ -78,7 +78,8 @@ Issues a loan for caller against the specified collateral, resulting in a debt o
 * Must be a supported asset type.
 * Must be active.
 #### _amountToBorrow:
-* Must be above 10 usd in value.
+* must be larger than 0
+* Total debt must be above 10 usd in value.
 * current user debt + _amountToBorrow + fee is below locking ratio for specified collateral.
 * _amountToBorrow + fee does not bring total debt + bad debt for specified collateral above debt ceiling.
 
