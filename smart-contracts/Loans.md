@@ -36,13 +36,17 @@ Handles collateral deposits of IRC2 tokens, with possibility to take loan in sam
 
 ### **Restrictions:**
 #### _from:
+  If from reserve do nothing
 #### _assetToBorrow:
 * Must be larger than 0
 #### _data:
 * Must be convertible to json with keys "_asset" and "_amount".
 #### Caller:
-* Must be an supported collateral
-* Must be an active collateral
+* If expected
+  * Do nothing
+* Else
+  * Must be an supported collateral
+  * Must be an active collateral
 
 ### **External calls:**
 * **Collateral contract**: symbol()
